@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add a Note - GhostriderJunior</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: black;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header {
+            padding: 20px;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            max-width: 400px;
+            margin: auto;
+        }
+
+        label {
+            margin-bottom: 10px;
+        }
+
+        input, textarea {
+            padding: 10px;
+            margin-bottom: 20px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background: red;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <a href="#">GhostriderJunior</a>
+    </header>
+
+    <!-- Add a Note Form -->
+    <form id="addNoteForm">
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="message">Your Message:</label>
+        <textarea id="message" name="message" rows="4" required></textarea>
+
+        <button type="button" onclick="addNote()">Add Note</button>
+    </form>
+
+    <script>
+        function addNote() {
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+    
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            const note = `<div class="note"><strong>${name}</strong><br>${message}</div>`;
+            notes.push(note);
+            localStorage.setItem('notes', JSON.stringify(notes));
+    
+            // Redirect to the notes tab after adding a note
+            window.location.href = 'notes.html';
+        }
+    </script>
+</body>
+</html>

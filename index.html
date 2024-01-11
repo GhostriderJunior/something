@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="style.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostriderJunior</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <a href="#">GhostriderJunior</a>
+    </header>
+
+    <!-- Video Background -->
+    <video class="video-background" autoplay muted loop playsinline>
+        <source src="flames.mp4" type="video/mp4">
+    </video>
+
+    <!-- Background Dropdown Selector -->
+    <div class="dropdown">
+        <label for="backgroundSelector">Select Background:</label>
+        <select id="backgroundSelector" onchange="changeBackground()">
+            <option value="default" selected>Default</option>
+            <option value="car">Car</option>
+            <option value="motorcycle">Motorcycle</option>
+        </select>
+    </div>
+
+    <!-- Main Content Section -->
+    <div class="content-section">
+        <!-- Left Box -->
+        <div class="box left-box" onmouseenter="playSound()">
+            <h2>Whateva</h2>
+            <p>Whateva bro</p>
+        </div>
+    
+        <!-- Middle Box -->
+        <div class="box middle-box" onmouseenter="playSound()">
+            <h2>About Me</h2>
+            <p>Your mom.</p>
+        </div>
+    
+        <!-- Right Box -->
+        <div class="box right-box" onmouseenter="playSound()">
+            <h2>Links</h2>
+            <p><a href="https://www.instagram.com/ghostriderjunior/" target="_blank" style="color: red;">Instagram</a></p>
+            <p><a href="https://discord.gg/ghostrider/" target="_blank" style="color: rgb(22, 108, 236);">Discord server</a></p>
+        </div>
+    
+        <!-- Add a Note Button -->
+        <div class="button-container">
+            <button class="button add-note-button" onclick="window.location.href='add_note.html'">Add a note</button>
+            <button class="button notes-button" onclick="window.location.href='notes.html'" style="margin-left: 50px;">Notes</button>
+        </div>
+
+
+    <!-- Footer Section -->
+    <footer>
+        &copy; 2024 GhostriderJunior | <a href="#" style="color: red;">Privacy Policy</a>
+    </footer>
+    <footer style="text-align: right; padding: 10px;">
+        | <a href="notes.html" target="_blank" style="color: rgb(255, 255, 255);">Notes</a> &copy; 2024 GhostriderJunior | <a href="#" style="color: red;">Privacy Policy</a>
+    </footer>
+
+
+
+
+
+    <!-- Audio Element for Sound Effect -->
+    <audio id="hoverSound" src="lace.mp3"></audio>
+    <!-- JavaScript to Play Sound and Change Background -->
+<!-- JavaScript to Play Sound and Change Background -->
+<!-- JavaScript to Play Sound and Change Background -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const notesContainer = document.getElementById('notesContainer');
+
+        displayNotes();
+
+        async function displayNotes() {
+            notesContainer.innerHTML = '';
+
+            try {
+                // Fetch notes from the server
+                const response = await axios.get('http://localhost:3000/notes');
+                const notes = response.data;
+
+                if (notes.length === 0) {
+                    notesContainer.innerHTML = '<p>No notes available.</p>';
+                } else {
+                    notes.forEach(function (note) {
+                        const noteElement = createNoteElement(note);
+                        notesContainer.appendChild(noteElement);
+                    });
+                }
+            } catch (error) {
+                console.error('Error fetching notes:', error);
+            }
+        }
+
+        function createNoteElement(note) {
+            const noteElement = document.createElement('div');
+            noteElement.className = 'note';
+            noteElement.innerHTML = note;
+            return noteElement;
+        }
+
+        async function addNote() {
+            const name = document.getElementById('name').value;
+            const message = document.getElementById('message').value;
+
+            try {
+                // Send the new note to the server
+                await axios.post('http://localhost:3000/notes', { name, message });
+
+                // After adding the note, fetch and display all notes
+                displayNotes();
+
+                // Clear the form
+                clearForm();
+            } catch (error) {
+                console.error('Error adding note:', error);
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('message').value = '';
+        }
+
+        document.getElementById('addNoteForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+            addNote();
+        });
+    });
+src="js/script.js"
+</script>
+</body>
+</html>

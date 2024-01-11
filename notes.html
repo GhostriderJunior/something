@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes - GhostriderJunior</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: black;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        header {
+            padding: 20px;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        #notesContainer {
+            max-width: 800px;
+            margin: auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .note {
+            background: rgba(255, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <a href="#">GhostriderJunior</a>
+    </header>
+
+    <!-- Notes Container -->
+    <div id="notesContainer"></div>
+
+    <script>
+        // Fetch notes from localStorage and display them
+        document.addEventListener('DOMContentLoaded', function () {
+            const notesContainer = document.getElementById('notesContainer');
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+
+            if (notes.length === 0) {
+                notesContainer.innerHTML = '<p>No notes available.</p>';
+            } else {
+                notes.forEach(function (note) {
+                    const noteElement = document.createElement('div');
+                    noteElement.className = 'note';
+                    noteElement.innerHTML = note;
+                    notesContainer.appendChild(noteElement);
+                });
+            }
+        });
+    </script>
+</body>
+</html>
