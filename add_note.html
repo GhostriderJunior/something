@@ -74,17 +74,19 @@
     </form>
 
     <script>
-        function addNote() {
+        async function addNote() {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
     
-            const notes = JSON.parse(localStorage.getItem('notes')) || [];
-            const note = `<div class="note"><strong>${name}</strong><br>${message}</div>`;
-            notes.push(note);
-            localStorage.setItem('notes', JSON.stringify(notes));
+            try {
+                // Send the new note to the server
+                await axios.post('http://localhost:3000/notes', { name, message });
     
-            // Redirect to the notes tab after adding a note
-            window.location.href = 'notes.html';
+                // Redirect to the notes page after adding a note
+                window.location.href = 'notes.html';
+            } catch (error) {
+                console.error('Error adding note:', error);
+            }
         }
     </script>
 </body>

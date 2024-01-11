@@ -1,18 +1,14 @@
-
-<script src="js/script.js"></script>
-
+// JavaScript (js/script.js)
 document.addEventListener('DOMContentLoaded', function () {
     const notesContainer = document.getElementById('notesContainer');
 
-    displayNotes();
-
+    // Function to fetch and display notes
     async function displayNotes() {
         notesContainer.innerHTML = '';
 
         try {
-            // Fetch notes from the server
-            const response = await axios.get('http://localhost:3000/notes');
-            const notes = response.data;
+            const response = await fetch('http://localhost:3000/notes');
+            const notes = await response.json();
 
             if (notes.length === 0) {
                 notesContainer.innerHTML = '<p>No notes available.</p>';
@@ -27,21 +23,27 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Function to create a note element
     function createNoteElement(note) {
         const noteElement = document.createElement('div');
         noteElement.className = 'note';
-        const formattedTimestamp = new Date(note.timestamp).toLocaleString();
-        noteElement.innerHTML = `<strong>${note.name}:</strong> ${note.message} <small>${formattedTimestamp}</small>`;
+        noteElement.innerHTML = `<strong>${note.name}:</strong> ${note.message}`;
         return noteElement;
     }
 
+    // Function to add a note
     async function addNote() {
         const name = document.getElementById('name').value;
         const message = document.getElementById('message').value;
 
         try {
-            // Send the new note to the server
-            await axios.post('http://localhost:3000/notes', { name, message });
+            await fetch('http://localhost:3000/notes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name, message }),
+            });
 
             // After adding the note, fetch and display all notes
             displayNotes();
@@ -53,13 +55,18 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Function to clear the form
     function clearForm() {
         document.getElementById('name').value = '';
         document.getElementById('message').value = '';
     }
 
+    // Event listener for form submission
     document.getElementById('addNoteForm').addEventListener('submit', function (event) {
         event.preventDefault();
         addNote();
     });
+
+    // Initial display of notes
+    displayNotes();
 });

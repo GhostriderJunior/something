@@ -54,21 +54,35 @@
     <div id="notesContainer"></div>
 
     <script>
-        // Fetch notes from localStorage and display them
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             const notesContainer = document.getElementById('notesContainer');
-            const notes = JSON.parse(localStorage.getItem('notes')) || [];
-
-            if (notes.length === 0) {
-                notesContainer.innerHTML = '<p>No notes available.</p>';
-            } else {
-                notes.forEach(function (note) {
-                    const noteElement = document.createElement('div');
-                    noteElement.className = 'note';
-                    noteElement.innerHTML = note;
-                    notesContainer.appendChild(noteElement);
-                });
+    
+            // Function to fetch and display notes
+            async function displayNotes() {
+                try {
+                    // Fetch notes from the server
+                    const response = await axios.get('http://localhost:3000/notes');
+                    const notes = response.data;
+    
+                    if (notes.length === 0) {
+                        notesContainer.innerHTML = '<p>No notes available.</p>';
+                    } else {
+                        notesContainer.innerHTML = ''; // Clear existing content
+    
+                        notes.forEach(function (note) {
+                            const noteElement = document.createElement('div');
+                            noteElement.className = 'note';
+                            noteElement.innerHTML = `<strong>${note.name}</strong><br>${note.message}`;
+                            notesContainer.appendChild(noteElement);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error fetching notes:', error);
+                }
             }
+    
+            // Call the displayNotes function when the page loads
+            displayNotes();
         });
     </script>
 </body>
