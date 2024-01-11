@@ -53,6 +53,12 @@
             border-radius: 5px;
             cursor: pointer;
         }
+
+        .error-message {
+            color: red;
+            font-size: 16px;
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -77,15 +83,25 @@
         async function addNote() {
             const name = document.getElementById('name').value;
             const message = document.getElementById('message').value;
-    
+
             try {
-                // Send the new note to the server
-                await axios.post('http://localhost:3000/notes', { name, message });
-    
-                // Redirect to the notes page after adding a note
-                window.location.href = 'notes.html';
+                await fetch('https://ghostriderjunior.xyz/api/notes', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name, message }),
+                });
+
+                // Redirect to the notes tab after adding a note
+                window.location.href = 'https://ghostriderjunior.xyz/notes';
             } catch (error) {
                 console.error('Error adding note:', error);
+
+                const errorMessageElement = document.createElement('div');
+                errorMessageElement.className = 'error-message';
+                errorMessageElement.textContent = 'Error adding note. Please try again later.';
+                document.body.appendChild(errorMessageElement);
             }
         }
     </script>
