@@ -3,40 +3,54 @@
 
 document.addEventListener('DOMContentLoaded', function () {
     const notesContainer = document.getElementById('notesContainer');
-    const notes = JSON.parse(localStorage.getItem('notes')) || [];
 
     displayNotes();
 
-    function displayNotes() {
+    async function displayNotes() {
         notesContainer.innerHTML = '';
 
-        if (notes.length === 0) {
-            notesContainer.innerHTML = '<p>No notes available.</p>';
-        } else {
-            notes.forEach(function (note) {
-                const noteElement = createNoteElement(note);
-                notesContainer.appendChild(noteElement);
-            });
+        try {
+            // Fetch notes from the server
+            const response = await axios.get('http://localhost:3000/notes');
+            const notes = response.data;
+
+            if (notes.length === 0) {
+                notesContainer.innerHTML = '<p>No notes available.</p>';
+            } else {
+                notes.forEach(function (note) {
+                    const noteElement = createNoteElement(note);
+                    notesContainer.appendChild(noteElement);
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching notes:', error);
         }
     }
 
     function createNoteElement(note) {
         const noteElement = document.createElement('div');
         noteElement.className = 'note';
-        noteElement.innerHTML = note;
+        const formattedTimestamp = new Date(note.timestamp).toLocaleString();
+        noteElement.innerHTML = `<strong>${note.name}:</strong> ${note.message} <small>${formattedTimestamp}</small>`;
         return noteElement;
     }
 
-    function addNote() {
+    async function addNote() {
         const name = document.getElementById('name').value;
         const message = document.getElementById('message').value;
 
-        const note = `<div>${name}: ${message}</div>`;
-        notes.push(note);
-        localStorage.setItem('notes', JSON.stringify(notes));
+        try {
+            // Send the new note to the server
+            await axios.post('http://localhost:3000/notes', { name, message });
 
-        displayNotes();
-        clearForm();
+            // After adding the note, fetch and display all notes
+            displayNotes();
+
+            // Clear the form
+            clearForm();
+        } catch (error) {
+            console.error('Error adding note:', error);
+        }
     }
 
     function clearForm() {

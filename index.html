@@ -19,15 +19,16 @@
         <source src="flames.mp4" type="video/mp4">
     </video>
 
-    <!-- Background Dropdown Selector -->
-    <div class="dropdown">
-        <label for="backgroundSelector">Select Background:</label>
-        <select id="backgroundSelector" onchange="changeBackground()">
-            <option value="default" selected>Default</option>
-            <option value="car">Car</option>
-            <option value="motorcycle">Motorcycle</option>
-        </select>
-    </div>
+<!-- Background Dropdown Selector -->
+<div class="dropdown">
+    <label for="backgroundSelector"></label>
+    <select id="backgroundSelector" onchange="changeBackground()">
+        <option value="default" selected>Default</option>
+        <option value="car">Car</option>
+        <option value="motorcycle">Motorcycle</option>
+    </select>
+</div>
+
 
     <!-- Main Content Section -->
     <div class="content-section">
@@ -61,10 +62,6 @@
     <footer>
         &copy; 2024 GhostriderJunior | <a href="#" style="color: red;">Privacy Policy</a>
     </footer>
-    <footer style="text-align: right; padding: 10px;">
-        | <a href="notes.html" target="_blank" style="color: rgb(255, 255, 255);">Notes</a> &copy; 2024 GhostriderJunior | <a href="#" style="color: red;">Privacy Policy</a>
-    </footer>
-
 
 
 
@@ -75,66 +72,70 @@
 <!-- JavaScript to Play Sound and Change Background -->
 <!-- JavaScript to Play Sound and Change Background -->
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const notesContainer = document.getElementById('notesContainer');
+    let contentSection = document.querySelector('.content-section');
+    let background = document.querySelector('.video-background');
+    let selector = document.getElementById('backgroundSelector');
 
-        displayNotes();
+    function playSound() {
+        var audio = document.getElementById('hoverSound');
+        audio.play();
+    }
 
-        async function displayNotes() {
-            notesContainer.innerHTML = '';
+    function changeBackground() {
+        if (selector.value === 'car') {
+            background.src = 'carlow.mp4';
+        } else if (selector.value === 'motorcycle') {
+            background.src = 'motorcycle.png'; // You can replace this with the appropriate file name for motorcycle background
+        } else {
+            background.src = 'flames.mp4'; // Default background
+        }
+        // Ensure the video starts playing after changing the source
+        background.play();
+    }
 
-            try {
-                // Fetch notes from the server
-                const response = await axios.get('http://localhost:3000/notes');
-                const notes = response.data;
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('.box')) {
+            // Clicked outside the boxes, toggle class to show/hide them
+            contentSection.classList.toggle('hidden');
+        }
+    });
 
-                if (notes.length === 0) {
-                    notesContainer.innerHTML = '<p>No notes available.</p>';
-                } else {
-                    notes.forEach(function (note) {
-                        const noteElement = createNoteElement(note);
-                        notesContainer.appendChild(noteElement);
-                    });
-                }
-            } catch (error) {
-                console.error('Error fetching notes:', error);
-            }
+    background.addEventListener('click', function (event) {
+        if (selector.value !== 'car' && selector.value !== 'motorcycle') {
+            // Change the background only if the selector is not set to car or motorcycle
+            changeBackground();
+
+            // Update the selector's text content to reflect the actual background
+            selector.value = 'default';
         }
 
-        function createNoteElement(note) {
-            const noteElement = document.createElement('div');
-            noteElement.className = 'note';
-            noteElement.innerHTML = note;
-            return noteElement;
+        // Prevent the click on the background from triggering the 'hidden' toggle
+        event.stopPropagation();
+    });
+
+    // Close the dropdown when clicking outside the selector
+    document.addEventListener('click', function (event) {
+        if (!event.target.closest('#backgroundSelector')) {
+            // Reset the selector to default
+            selector.value = 'default';
         }
+    });
 
-        async function addNote() {
-            const name = document.getElementById('name').value;
-            const message = document.getElementById('message').value;
-
-            try {
-                // Send the new note to the server
-                await axios.post('http://localhost:3000/notes', { name, message });
-
-                // After adding the note, fetch and display all notes
-                displayNotes();
-
-                // Clear the form
-                clearForm();
-            } catch (error) {
-                console.error('Error adding note:', error);
-            }
-        }
-
-        function clearForm() {
-            document.getElementById('name').value = '';
-            document.getElementById('message').value = '';
-        }
-
-        document.getElementById('addNoteForm').addEventListener('submit', function (event) {
-            event.preventDefault();
-            addNote();
+    // Stop propagation of click events on the dropdown elements
+    document.querySelectorAll('.dropdown').forEach(function (dropdown) {
+        dropdown.addEventListener('click', function (event) {
+            event.stopPropagation();
         });
+    });
+
+    // Open a new tab when Add a Note button is clicked
+    document.getElementById('addNoteBtn').addEventListener('click', function () {
+        window.open('add_note.html', '_blank');
+    });
+
+    // Open a new tab when Add a Note button is clicked
+    document.getElementById('addNoteBtn').addEventListener('click', function () {
+        window.open('add_note.html', '_blank');
     });
 src="js/script.js"
 </script>
