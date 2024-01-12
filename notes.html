@@ -61,11 +61,11 @@
     <script>
         async function fetchAndDisplayNotes() {
             const notesContainer = document.getElementById('notesContainer');
-
+    
             try {
-                const response = await fetch('http://localhost:3000/notes');
+                const response = await fetch('https://ghostriderjunior.xyz/api/notes');
                 const notes = await response.json();
-
+    
                 if (notes.length === 0) {
                     notesContainer.innerHTML = '<p>No notes available.</p>';
                 } else {
@@ -75,15 +75,16 @@
                 }
             } catch (error) {
                 console.error('Error fetching notes:', error);
-
+    
                 const errorMessageElement = document.createElement('div');
                 errorMessageElement.className = 'error-message';
                 errorMessageElement.textContent = 'Error fetching notes. Please try again later.';
                 notesContainer.appendChild(errorMessageElement);
             }
         }
-
+    
         document.addEventListener('DOMContentLoaded', fetchAndDisplayNotes);
     </script>
+    
 </body>
 </html>
