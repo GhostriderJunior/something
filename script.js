@@ -1,4 +1,3 @@
-// JavaScript (js/script.js)
 document.addEventListener('DOMContentLoaded', function () {
     const notesContainer = document.getElementById('notesContainer');
 
@@ -11,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const notes = await response.json();
 
             if (notes.length === 0) {
-                notesContainer.innerHTML = '<p>No notes available.</p>';
+                notesContainer.innerHTML = '<p>No reviews available.</p>';
             } else {
                 notes.forEach(function (note) {
                     const noteElement = createNoteElement(note);
@@ -19,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
         } catch (error) {
-            console.error('Error fetching notes:', error);
+            console.error('Error fetching reviews:', error);
         }
     }
 
@@ -31,11 +30,10 @@ document.addEventListener('DOMContentLoaded', function () {
         return noteElement;
     }
 
-    // Function to add a note
     async function addNote() {
         const name = document.getElementById('name').value;
         const message = document.getElementById('message').value;
-
+    
         try {
             await fetch('https://ghostriderjunior.xyz/api/addnote', {
                 method: 'POST',
@@ -44,55 +42,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: JSON.stringify({ name, message }),
             });
-
-            // After adding the note, fetch and display all notes
-            displayNotes();
-
-            // Clear the form
-            clearForm();
+    
+            // Redirect to the notes tab after adding a note
+            window.location.href = 'https://ghostriderjunior.xyz/notes';
         } catch (error) {
-            console.error('Error adding note:', error);
+            console.error('Error fetching reviews:', error);
+            
+            const errorMessageElement = document.createElement('div');
+            errorMessageElement.className = 'error-message';
+            errorMessageElement.textContent = 'Error fetching reviews: ' + error.message;
+            document.body.appendChild(errorMessageElement);
         }
     }
 
-    // Function to clear the form
-    function clearForm() {
-        document.getElementById('name').value = '';
-        document.getElementById('message').value = '';
-    }
-
-    // Event listener for form submission
-    document.getElementById('addNoteForm').addEventListener('submit', function (event) {
-        event.preventDefault();
-        addNote();
-    });
-
-    // Initial display of notes
+    // Call the displayNotes function when the page loads
     displayNotes();
 });
-
-// Add Note HTML Page (add_note.html)
-async function addNote() {
-    const name = document.getElementById('name').value;
-    const message = document.getElementById('message').value;
-
-    try {
-        await fetch('https://ghostriderjunior.xyz/api/addnote', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name, message }),
-        });
-
-        // Redirect to the notes tab after adding a note
-        window.location.href = 'https://ghostriderjunior.xyz/notes';
-    } catch (error) {
-        console.error('Error adding note:', error);
-
-        const errorMessageElement = document.createElement('div');
-        errorMessageElement.className = 'error-message';
-        errorMessageElement.textContent = 'Error adding note. Please try again later.';
-        document.body.appendChild(errorMessageElement);
-    }
-}
