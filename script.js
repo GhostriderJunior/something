@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
         notesContainer.innerHTML = '';
 
         try {
-            const response = await fetch('http://localhost:3000/notes');
+            const response = await fetch('https://ghostriderjunior.xyz/notes');
             const notes = await response.json();
 
             if (notes.length === 0) {
@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const message = document.getElementById('message').value;
 
         try {
-            await fetch('http://localhost:3000/notes', {
+            await fetch('https://ghostriderjunior.xyz/api/addnote', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -1,23 +1,25 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-// Endpoint for adding notes
-app.post('/api/notes', (req, res) => {
-    // Extract data from the request body
+const notes = []; // You can replace this with your data store
+
+// Handle POST requests to add a note
+app.post('/api/addnote', (req, res) => {
     const { name, message } = req.body;
 
-    // Process the data (e.g., save it to a database)
-    // ...
+    // Add the note to your data store
+    const newNote = { name, message };
+    notes.push(newNote);
 
-    // Send a response (e.g., success or error)
-    res.status(200).json({ message: 'Note added successfully' });
+    // Send a response
+    res.json({ success: true, message: 'Note added successfully' });
 });
 
-// Start the server
-const port = 3000; // Change this to the port you want to use
-app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
+// Add other routes as needed
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
