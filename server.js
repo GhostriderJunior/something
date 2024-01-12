@@ -6,6 +6,7 @@ app.use(express.json());
 
 const notes = []; // You can replace this with your data store
 
+
 // Handle POST requests to add a note
 app.post('/api/addnote', (req, res) => {
     const { name, message } = req.body;

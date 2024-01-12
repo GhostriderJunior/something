@@ -70,3 +70,29 @@ document.addEventListener('DOMContentLoaded', function () {
     // Initial display of notes
     displayNotes();
 });
+
+// Add Note HTML Page (add_note.html)
+async function addNote() {
+    const name = document.getElementById('name').value;
+    const message = document.getElementById('message').value;
+
+    try {
+        await fetch('https://ghostriderjunior.xyz/api/addnote', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, message }),
+        });
+
+        // Redirect to the notes tab after adding a note
+        window.location.href = 'https://ghostriderjunior.xyz/notes';
+    } catch (error) {
+        console.error('Error adding note:', error);
+
+        const errorMessageElement = document.createElement('div');
+        errorMessageElement.className = 'error-message';
+        errorMessageElement.textContent = 'Error adding note. Please try again later.';
+        document.body.appendChild(errorMessageElement);
+    }
+}
